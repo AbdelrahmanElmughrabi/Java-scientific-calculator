@@ -1,0 +1,11 @@
+# NetBeans generated files
+build/
+test/
+
+# VS Code settings
+.vscode/
+
+# NetBeans project files
+nbproject/private/
+build.xml
+manifest.mf
