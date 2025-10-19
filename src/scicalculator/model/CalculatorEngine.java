@@ -1,6 +1,8 @@
 package scicalculator.model;
 
 import scicalculator.exception.*;
+import scicalculator.util.FormatUtils;
+import scicalculator.util.MathUtils;
 
 /**
  * Core calculation engine for the scientific calculator
@@ -64,8 +66,45 @@ public class CalculatorEngine {
             return;
         }
 
-        // TODO: Implement binary operation logic
-        // This will be implemented in phase 2
+        try {
+            // Parse current display value
+            double currentValue = FormatUtils.parseNumber(state.getDisplayText());
+
+            // If there's a pending operation, calculate it first (chaining)
+            if (state.getCurrentOperation() != null && !state.isNewInput()) {
+                double storedValue = state.getStoredValue();
+                double result = executeBinaryOperation(storedValue, currentValue, state.getCurrentOperation());
+
+                // Validate result
+                if (!MathUtils.isValidNumber(result)) {
+                    state.setError(true);
+                    state.setDisplayText("Error");
+                    return;
+                }
+
+                // Check for overflow
+                MathUtils.checkOverflow(result);
+
+                // Update display and current value
+                state.setDisplayText(FormatUtils.formatNumber(result));
+                state.setCurrentValue(result);
+                currentValue = result;
+            }
+
+            // Store the current value for the next operation
+            state.setStoredValue(currentValue);
+            state.setCurrentOperation(operation);
+            state.setNewInput(true);
+
+        } catch (CalculatorException e) {
+            state.setError(true);
+            state.setDisplayText("Error");
+            state.setCurrentOperation(null);
+        } catch (NumberFormatException e) {
+            state.setError(true);
+            state.setDisplayText("Error");
+            state.setCurrentOperation(null);
+        }
     }
 
     /**
@@ -78,8 +117,35 @@ public class CalculatorEngine {
             return;
         }
 
-        // TODO: Implement unary operation logic
-        // This will be implemented in phase 2
+        try {
+            // Parse current display value
+            double currentValue = FormatUtils.parseNumber(state.getDisplayText());
+
+            // Execute the unary operation
+            double result = executeUnaryOperation(currentValue, operation);
+
+            // Validate result
+            if (!MathUtils.isValidNumber(result)) {
+                state.setError(true);
+                state.setDisplayText("Error");
+                return;
+            }
+
+            // Check for overflow
+            MathUtils.checkOverflow(result);
+
+            // Format and display result
+            state.setDisplayText(FormatUtils.formatNumber(result));
+            state.setCurrentValue(result);
+            state.setNewInput(true);
+
+        } catch (CalculatorException e) {
+            state.setError(true);
+            state.setDisplayText("Error");
+        } catch (NumberFormatException e) {
+            state.setError(true);
+            state.setDisplayText("Error");
+        }
     }
 
     /**
@@ -91,8 +157,43 @@ public class CalculatorEngine {
             return;
         }
 
-        // TODO: Implement result calculation
-        // This will be implemented in phase 2
+        try {
+            // Parse current display value (second operand)
+            double currentValue = FormatUtils.parseNumber(state.getDisplayText());
+
+            // Get stored value (first operand)
+            double storedValue = state.getStoredValue();
+
+            // Execute the pending operation
+            double result = executeBinaryOperation(storedValue, currentValue, state.getCurrentOperation());
+
+            // Validate result
+            if (!MathUtils.isValidNumber(result)) {
+                state.setError(true);
+                state.setDisplayText("Error");
+                state.setCurrentOperation(null);
+                return;
+            }
+
+            // Check for overflow
+            MathUtils.checkOverflow(result);
+
+            // Format and display result
+            state.setDisplayText(FormatUtils.formatNumber(result));
+            state.setCurrentValue(result);
+            state.setStoredValue(0);
+            state.setCurrentOperation(null);
+            state.setNewInput(true);
+
+        } catch (CalculatorException e) {
+            state.setError(true);
+            state.setDisplayText("Error");
+            state.setCurrentOperation(null);
+        } catch (NumberFormatException e) {
+            state.setError(true);
+            state.setDisplayText("Error");
+            state.setCurrentOperation(null);
+        }
     }
 
     /**
@@ -143,5 +244,70 @@ public class CalculatorEngine {
      */
     public String getDisplay() {
         return state.getDisplayText();
+    }
+
+    /**
+     * Execute a binary operation (two operands)
+     * @param left The first operand
+     * @param right The second operand
+     * @param operation The operation to perform
+     * @return The result of the operation
+     * @throws CalculatorException If the operation fails
+     */
+    private double executeBinaryOperation(double left, double right, Operation operation)
+            throws CalculatorException {
+        switch (operation) {
+            case ADD:
+                return left + right;
+            case SUBTRACT:
+                return left - right;
+            case MULTIPLY:
+                return left * right;
+            case DIVIDE:
+                return MathUtils.safeDivide(left, right);
+            case POWER:
+                return MathUtils.power(left, right);
+            default:
+                throw new InvalidExpressionException("Unknown binary operation: " + operation);
+        }
+    }
+
+    /**
+     * Execute a unary operation (one operand)
+     * @param value The operand
+     * @param operation The operation to perform
+     * @return The result of the operation
+     * @throws CalculatorException If the operation fails
+     */
+    private double executeUnaryOperation(double value, Operation operation)
+            throws CalculatorException {
+        switch (operation) {
+            case SIN:
+                return MathUtils.sin(value);
+            case COS:
+                return MathUtils.cos(value);
+            case TAN:
+                return MathUtils.tan(value);
+            case ASIN:
+                return MathUtils.asin(value);
+            case ACOS:
+                return MathUtils.acos(value);
+            case ATAN:
+                return MathUtils.atan(value);
+            case LOG:
+                return MathUtils.log10(value);
+            case LN:
+                return MathUtils.ln(value);
+            case SQRT:
+                return MathUtils.sqrt(value);
+            case FACTORIAL:
+                return MathUtils.factorial((int) value);
+            case PERCENT:
+                return value / 100.0;
+            case NEGATE:
+                return MathUtils.negate(value);
+            default:
+                throw new InvalidExpressionException("Unknown unary operation: " + operation);
+        }
     }
 }
