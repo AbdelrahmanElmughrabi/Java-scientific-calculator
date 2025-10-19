@@ -30,12 +30,28 @@ public class FormatUtils {
      * @return The formatted display string
      */
     public static String formatNumber(double value) {
-        // TODO: Implement number formatting
-        // - Handle special cases (NaN, Infinity)
-        // - Use scientific notation for large/small numbers
-        // - Limit decimal places to prevent overflow
-        // - Remove trailing zeros
-        return String.valueOf(value);
+        // Handle special cases
+        if (Double.isNaN(value)) {
+            return "Error";
+        }
+        if (Double.isInfinite(value)) {
+            return value > 0 ? "∞" : "-∞";
+        }
+
+        // Use scientific notation for very large or very small numbers
+        if (shouldUseScientific(value)) {
+            return formatScientific(value);
+        }
+
+        // Format with maximum decimal places
+        DecimalFormat decimalFormat = new DecimalFormat("0.##########", DecimalFormatSymbols.getInstance(Locale.US));
+        String formatted = decimalFormat.format(value);
+
+        // Remove trailing zeros
+        formatted = removeTrailingZeros(formatted);
+
+        // Truncate if too long
+        return truncateDisplay(formatted);
     }
 
     /**
@@ -57,13 +73,19 @@ public class FormatUtils {
      * @throws NumberFormatException If the text cannot be parsed
      */
     public static double parseNumber(String displayText) throws NumberFormatException {
-        // TODO: Implement parsing
-        // Handle empty strings, special characters
-        // Validate input before parsing
         if (displayText == null || displayText.isEmpty()) {
             return 0.0;
         }
-        return Double.parseDouble(displayText);
+
+        // Trim whitespace
+        String trimmed = displayText.trim();
+
+        // Handle error display
+        if (trimmed.equalsIgnoreCase("Error") || trimmed.equals("∞") || trimmed.equals("-∞")) {
+            return 0.0;
+        }
+
+        return Double.parseDouble(trimmed);
     }
 
     /**
@@ -72,11 +94,19 @@ public class FormatUtils {
      * @return True if valid number, false otherwise
      */
     public static boolean isValidNumber(String text) {
-        // TODO: Implement validation
-        // Check for valid number format
-        // Allow decimals, negatives, etc.
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+
+        String trimmed = text.trim();
+
+        // Empty after trim
+        if (trimmed.isEmpty()) {
+            return false;
+        }
+
         try {
-            Double.parseDouble(text);
+            Double.parseDouble(trimmed);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -89,10 +119,29 @@ public class FormatUtils {
      * @return The cleaned string
      */
     public static String removeTrailingZeros(String numberString) {
-        // TODO: Implement trailing zero removal
-        // Preserve at least one digit after decimal
-        // Examples: "3.50" -> "3.5", "4.00" -> "4"
-        return numberString;
+        if (numberString == null || numberString.isEmpty()) {
+            return numberString;
+        }
+
+        // Don't process scientific notation
+        if (numberString.contains("E") || numberString.contains("e")) {
+            return numberString;
+        }
+
+        // Only process if it contains a decimal point
+        if (!numberString.contains(".")) {
+            return numberString;
+        }
+
+        // Remove trailing zeros
+        String result = numberString.replaceAll("0+$", "");
+
+        // Remove trailing decimal point if all decimals were zeros
+        if (result.endsWith(".")) {
+            result = result.substring(0, result.length() - 1);
+        }
+
+        return result;
     }
 
     /**
@@ -101,8 +150,9 @@ public class FormatUtils {
      * @return The truncated text
      */
     public static String truncateDisplay(String text) {
-        // TODO: Implement truncation
-        // Ensure display doesn't overflow
+        if (text == null) {
+            return "";
+        }
         if (text.length() > MAX_DISPLAY_LENGTH) {
             return text.substring(0, MAX_DISPLAY_LENGTH);
         }
@@ -128,9 +178,7 @@ public class FormatUtils {
      * @return The scientific notation string
      */
     public static String formatScientific(double value) {
-        // TODO: Implement scientific notation formatting
-        // Use format like "1.23E+10"
-        DecimalFormat scientificFormat = new DecimalFormat("0.##E0");
+        DecimalFormat scientificFormat = new DecimalFormat("0.##########E0", DecimalFormatSymbols.getInstance(Locale.US));
         return scientificFormat.format(value);
     }
 
@@ -140,8 +188,6 @@ public class FormatUtils {
      * @return True if scientific notation should be used
      */
     public static boolean shouldUseScientific(double value) {
-        // TODO: Implement logic to determine when to use scientific notation
-        // Typically for very large (>1E10) or very small (<1E-6) numbers
         double absValue = Math.abs(value);
         return (absValue != 0.0 && (absValue >= 1E10 || absValue < 1E-6));
     }
