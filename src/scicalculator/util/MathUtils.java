@@ -132,5 +132,141 @@ public class MathUtils {
         return safeDivide(value, total) * 100;
     }
 
-    
+    /**
+     * Calculate sine of an angle in degrees
+     * @param degrees The angle in degrees
+     * @return The sine value
+     */
+    public static double sin(double degrees) {
+        return Math.sin(toRadians(degrees));
+    }
+
+    /**
+     * Calculate cosine of an angle in degrees
+     * @param degrees The angle in degrees
+     * @return The cosine value
+     */
+    public static double cos(double degrees) {
+        return Math.cos(toRadians(degrees));
+    }
+
+    /**
+     * Calculate tangent of an angle in degrees
+     * @param degrees The angle in degrees
+     * @return The tangent value
+     * @throws InvalidExpressionException If tangent is undefined (at 90°, 270°, etc.)
+     */
+    public static double tan(double degrees) throws InvalidExpressionException {
+        double radians = toRadians(degrees);
+        if (Math.abs(Math.cos(radians)) < 1e-10) {
+            throw new InvalidExpressionException("Tangent undefined at this angle");
+        }
+        return Math.tan(radians);
+    }
+
+    /**
+     * Calculate arc sine (inverse sine) and return result in degrees
+     * @param value The value (must be between -1 and 1)
+     * @return The angle in degrees
+     * @throws InvalidExpressionException If value is outside [-1, 1]
+     */
+    public static double asin(double value) throws InvalidExpressionException {
+        if (value < -1.0 || value > 1.0) {
+            throw new InvalidExpressionException("Arc sine domain error: value must be between -1 and 1");
+        }
+        return toDegrees(Math.asin(value));
+    }
+
+    /**
+     * Calculate arc cosine (inverse cosine) and return result in degrees
+     * @param value The value (must be between -1 and 1)
+     * @return The angle in degrees
+     * @throws InvalidExpressionException If value is outside [-1, 1]
+     */
+    public static double acos(double value) throws InvalidExpressionException {
+        if (value < -1.0 || value > 1.0) {
+            throw new InvalidExpressionException("Arc cosine domain error: value must be between -1 and 1");
+        }
+        return toDegrees(Math.acos(value));
+    }
+
+    /**
+     * Calculate arc tangent (inverse tangent) and return result in degrees
+     * @param value The value
+     * @return The angle in degrees
+     */
+    public static double atan(double value) {
+        return toDegrees(Math.atan(value));
+    }
+
+    /**
+     * Calculate base-10 logarithm
+     * @param value The value (must be positive)
+     * @return The logarithm base 10
+     * @throws InvalidExpressionException If value is not positive
+     */
+    public static double log10(double value) throws InvalidExpressionException {
+        if (value <= 0) {
+            throw new InvalidExpressionException("Logarithm of non-positive number");
+        }
+        return Math.log10(value);
+    }
+
+    /**
+     * Calculate natural logarithm (base e)
+     * @param value The value (must be positive)
+     * @return The natural logarithm
+     * @throws InvalidExpressionException If value is not positive
+     */
+    public static double ln(double value) throws InvalidExpressionException {
+        if (value <= 0) {
+            throw new InvalidExpressionException("Natural log of non-positive number");
+        }
+        return Math.log(value);
+    }
+
+    /**
+     * Calculate square root
+     * @param value The value (must be non-negative)
+     * @return The square root
+     * @throws InvalidExpressionException If value is negative
+     */
+    public static double sqrt(double value) throws InvalidExpressionException {
+        if (value < 0) {
+            throw new InvalidExpressionException("Square root of negative number");
+        }
+        return Math.sqrt(value);
+    }
+
+    /**
+     * Calculate power (base raised to exponent)
+     * @param base The base value
+     * @param exponent The exponent
+     * @return The result of base^exponent
+     * @throws OverflowException If result is too large
+     */
+    public static double power(double base, double exponent) throws OverflowException {
+        double result = Math.pow(base, exponent);
+        checkOverflow(result);
+        return result;
+    }
+
+    /**
+     * Calculate reciprocal (1/x)
+     * @param value The value
+     * @return The reciprocal
+     * @throws DivisionByZeroException If value is zero
+     */
+    public static double reciprocal(double value) throws DivisionByZeroException {
+        return safeDivide(1.0, value);
+    }
+
+    /**
+     * Negate a value (change sign)
+     * @param value The value to negate
+     * @return The negated value
+     */
+    public static double negate(double value) {
+        return -value;
+    }
 }
