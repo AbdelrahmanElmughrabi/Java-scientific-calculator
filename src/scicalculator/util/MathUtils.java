@@ -25,10 +25,21 @@ public class MathUtils {
      * @throws OverflowException If result exceeds maximum value
      */
     public static double factorial(int n) throws InvalidExpressionException, OverflowException {
-        // TODO: Implement factorial calculation
-        // Validate that n >= 0
-        // Check for overflow conditions
-        return 0;
+        if (n < 0) {
+            throw new InvalidExpressionException("Factorial is not defined for negative numbers");
+        }
+
+        if (n > 170) {
+            throw new OverflowException("Factorial result is too large");
+        }
+
+        double result = 1.0;
+        for (int i = 2; i <= n; i++) {
+            result *= i;
+        }
+
+        checkOverflow(result);
+        return result;
     }
 
     /**
@@ -39,10 +50,24 @@ public class MathUtils {
      * @throws DivisionByZeroException If divisor is zero
      */
     public static double safeDivide(double dividend, double divisor) throws DivisionByZeroException {
-        // TODO: Implement safe division
-        // Check if divisor is zero or very close to zero
-        // Throw DivisionByZeroException if needed
-        return 0;
+        if (divisor == 0.0 || Math.abs(divisor) < 1e-10) {
+            throw new DivisionByZeroException("Cannot divide by zero");
+        }
+        return dividend / divisor;
+    }
+
+    /**
+     * Safely perform modulo operation with zero checking
+     * @param dividend The numerator
+     * @param divisor The denominator
+     * @return The modulo result
+     * @throws DivisionByZeroException If divisor is zero
+     */
+    public static double safeModulo(double dividend, double divisor) throws DivisionByZeroException {
+        if (divisor == 0.0 || Math.abs(divisor) < 1e-10) {
+            throw new DivisionByZeroException("Cannot perform modulo with zero");
+        }
+        return dividend % divisor;
     }
 
     /**
@@ -51,9 +76,7 @@ public class MathUtils {
      * @return True if valid, false otherwise
      */
     public static boolean isValidNumber(double value) {
-        // TODO: Implement validation
-        // Check for NaN, Infinity, -Infinity
-        return true;
+        return !Double.isNaN(value) && !Double.isInfinite(value);
     }
 
     /**
@@ -62,7 +85,6 @@ public class MathUtils {
      * @return The angle in radians
      */
     public static double toRadians(double degrees) {
-        // TODO: Implement conversion
         return Math.toRadians(degrees);
     }
 
@@ -72,7 +94,6 @@ public class MathUtils {
      * @return The angle in degrees
      */
     public static double toDegrees(double radians) {
-        // TODO: Implement conversion
         return Math.toDegrees(radians);
     }
 
@@ -82,9 +103,9 @@ public class MathUtils {
      * @throws OverflowException If value is too large
      */
     public static void checkOverflow(double value) throws OverflowException {
-        // TODO: Implement overflow checking
-        // Define maximum acceptable value
-        // Throw OverflowException if exceeded
+        if (Double.isInfinite(value)) {
+            throw new OverflowException("Value is too large");
+        }
     }
 
     /**
@@ -94,9 +115,11 @@ public class MathUtils {
      * @return The rounded value
      */
     public static double round(double value, int places) {
-        // TODO: Implement precise rounding
-        // Use BigDecimal for precision if needed
-        return value;
+        if (places < 0) {
+            return value;
+        }
+        double multiplier = Math.pow(10, places);
+        return Math.round(value * multiplier) / multiplier;
     }
 
     /**
@@ -105,8 +128,9 @@ public class MathUtils {
      * @param total The total (100%)
      * @return The percentage
      */
-    public static double percentage(double value, double total) {
-        // TODO: Implement percentage calculation
-        return (value / total) * 100;
+    public static double percentage(double value, double total) throws DivisionByZeroException {
+        return safeDivide(value, total) * 100;
     }
+
+    
 }
