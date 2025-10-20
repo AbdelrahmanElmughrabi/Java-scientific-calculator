@@ -1,4 +1,4 @@
-package scicalculator.exception;
+package scicalculator1.exception;
 
 /**
  * Exception thrown when a calculation result exceeds the maximum representable value

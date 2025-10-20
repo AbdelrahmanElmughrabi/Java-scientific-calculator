@@ -1,4 +1,4 @@
-package scicalculator.model;
+package scicalculator1.model;
 
 /**
  * Enumeration of all calculator operations
@@ -12,6 +12,7 @@ public enum Operation {
     SUBTRACT("-", false),
     MULTIPLY("×", false),
     DIVIDE("÷", false),
+    MODULO("mod", false),
 
     // Scientific operations - Trigonometric
     SIN("sin", true),
@@ -24,14 +25,19 @@ public enum Operation {
     // Scientific operations - Logarithmic
     LOG("log", true),
     LN("ln", true),
+    EXP("exp", true),
+    TENPOWX("10^", true),
 
     // Scientific operations - Power and roots
     POWER("^", false),
     SQRT("√", true),
+    SQUARE("x²", true),
 
     // Other scientific operations
     FACTORIAL("!", true),
     PERCENT("%", true),
+    RECIPROCAL("1/x", true),
+    ABS("|x|", true),
 
     // Special operations
     EQUALS("=", false),

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  Scientific Calculator UI (JavaFX 8) — no external CSS.
+  - Uses percent-based GridPane constraints for responsive resize.
+  - Display mimics Windows: small expression (top-right), big result (bottom-right).
+  - Button colors/hover/press handled by controller.initialize() for uniformity.
+-->
+<BorderPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="scicalculator1.controller.CalculatorController"
+            prefWidth="480" prefHeight="760"
+            style="-fx-background-color:#202020; -fx-font-family:'Segoe UI','Arial';">
+
+    <!-- ===== TOP HALF: title + display + memory ===== -->
+    <top>
+        <VBox spacing="10" BorderPane.alignment="CENTER">
+
+            <!-- Title bar -->
+            <HBox alignment="CENTER_LEFT" spacing="10"
+                  style="-fx-padding:8 12 0 12;">
+                <Label text="Scientific"
+                       style="-fx-text-fill:#ffffff; -fx-font-size:18px; -fx-font-weight:600;"/>
+            </HBox>
+
+            <!-- Display area -->
+            <StackPane style="-fx-background-color:#202020; -fx-min-height:200px;">
+                <padding>
+                    <Insets top="12" right="16" bottom="12" left="12"/>
+                </padding>
+
+                <!-- Small expression (top-right) -->
+                <Label fx:id="historyLabel" text=""
+                       StackPane.alignment="TOP_RIGHT"
+                       style="-fx-text-fill:#a6a6a6; -fx-font-size:15px; -fx-padding:0 12 10 12;"/>
+
+                <!-- Big result (bottom-right) -->
+                <Label fx:id="resultLabel" text="0"
+                       StackPane.alignment="BOTTOM_RIGHT"
+                       style="-fx-text-fill:#ffffff; -fx-font-size:60px; -fx-font-weight:700; -fx-padding:0 12 4 12;"/>
+            </StackPane>
+
+            <!-- Memory bar (styled in controller) -->
+            <HBox fx:id="memoryBar" spacing="6" style="-fx-padding:0 12 0 12;">
+                <Button text="MC" onAction="#memClear"/>
+                <Button text="MR" onAction="#memRecall"/>
+                <Button text="M+" onAction="#memPlus"/>
+                <Button text="M−" onAction="#memMinus"/>
+                <Button text="MS" onAction="#memStore"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ===== KEYPAD (5 columns x 7 rows) ===== -->
+    <center>
+        <GridPane fx:id="keypad" hgap="8" vgap="8" BorderPane.alignment="CENTER"
+                  style="-fx-background-color:#202020;">
+            <padding>
+                <Insets top="8" right="12" bottom="12" left="12"/>
+            </padding>
+
+            <!-- Responsive column/row sizes -->
+            <columnConstraints>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="20"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="14.2857"/>
+                <RowConstraints percentHeight="14.2857"/>
+                <RowConstraints percentHeight="14.2857"/>
+                <RowConstraints percentHeight="14.2857"/>
+                <RowConstraints percentHeight="14.2857"/>
+                <RowConstraints percentHeight="14.2857"/>
+                <RowConstraints percentHeight="14.2857"/>
+            </rowConstraints>
+
+            <!-- Row 0 -->
+            <Button text="2ⁿᵈ" onAction="#toggleSecond" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Button text="π"    onAction="#constPi"     GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Button text="e"    onAction="#constE"      GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <Button text="C"    onAction="#handleClearEntry" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+            <Button text="⌫"    onAction="#handleBackspace"  GridPane.rowIndex="0" GridPane.columnIndex="4"/>
+
+            <!-- Row 1 -->
+            <Button text="x²"  onAction="#square"        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Button text="√x"  onAction="#sqrt"          GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Button text="|x|" onAction="#abs"           GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <Button text="exp" onAction="#exp"           GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+            <Button text="mod" onAction="#handleOperator" GridPane.rowIndex="1" GridPane.columnIndex="4"/>
+
+            <!-- Row 2 -->
+            <Button text="1/x" onAction="#reciprocal"    GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Button text="("   onAction="#noopParen"     GridPane.rowIndex="2" GridPane.columnIndex="1" disable="true"/>
+            <Button text=")"   onAction="#noopParen"     GridPane.rowIndex="2" GridPane.columnIndex="2" disable="true"/>
+            <Button text="n!"  onAction="#factorial"     GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+            <Button text="÷"   onAction="#handleOperator" GridPane.rowIndex="2" GridPane.columnIndex="4"/>
+
+            <!-- Row 3 -->
+            <Button text="7" onAction="#handleDigit"     GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <Button text="8" onAction="#handleDigit"     GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Button text="9" onAction="#handleDigit"     GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+            <Button text="×" onAction="#handleOperator"  GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+            <Button text="xʸ" onAction="#handleOperator" GridPane.rowIndex="3" GridPane.columnIndex="4"/>
+
+            <!-- Row 4 -->
+            <Button text="4" onAction="#handleDigit"     GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <Button text="5" onAction="#handleDigit"     GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            <Button text="6" onAction="#handleDigit"     GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+            <Button text="−" onAction="#handleOperator"  GridPane.rowIndex="4" GridPane.columnIndex="3"/>
+            <Button text="10ˣ" onAction="#tenPowX"       GridPane.rowIndex="4" GridPane.columnIndex="4"/>
+
+            <!-- Row 5 -->
+            <Button text="1" onAction="#handleDigit"     GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <Button text="2" onAction="#handleDigit"     GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+            <Button text="3" onAction="#handleDigit"     GridPane.rowIndex="5" GridPane.columnIndex="2"/>
+            <Button text="+" onAction="#handleOperator"  GridPane.rowIndex="5" GridPane.columnIndex="3"/>
+            <Button text="log" onAction="#log10"         GridPane.rowIndex="5" GridPane.columnIndex="4"/>
+
+            <!-- Row 6 -->
+            <Button text="±" onAction="#handleSign"      GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+            <Button text="0" onAction="#handleDigit"     GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+            <Button text="." onAction="#handleDot"       GridPane.rowIndex="6" GridPane.columnIndex="2"/>
+            <!-- NOTE: use \% (FXML: %% is deprecated) -->
+            <Button text="\%" onAction="#handlePercent"  GridPane.rowIndex="6" GridPane.columnIndex="3"/>
+            <Button text="="  onAction="#handleEquals"   GridPane.rowIndex="6" GridPane.columnIndex="4"/>
+        </GridPane>
+    </center>
+</BorderPane>

@@ -9,3 +9,5 @@ nbproject/
 nbproject/private/
 build.xml
 manifest.mf
+/dist/
+

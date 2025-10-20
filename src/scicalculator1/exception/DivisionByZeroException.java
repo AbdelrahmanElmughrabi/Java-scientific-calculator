@@ -1,4 +1,4 @@
-package scicalculator.exception;
+package scicalculator1.exception;
 
 /**
  * Exception thrown when attempting to divide by zero

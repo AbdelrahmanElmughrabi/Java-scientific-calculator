@@ -1,6 +1,6 @@
-package scicalculator.util;
+package scicalculator1.util;
 
-import scicalculator.exception.*;
+import scicalculator1.exception.*;
 
 /**
  * Helper class for mathematical utility functions

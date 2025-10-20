@@ -1,4 +1,4 @@
-package scicalculator.exception;
+package scicalculator1.exception;
 
 /**
  * Base exception class for calculator-related errors

@@ -1,4 +1,4 @@
-package scicalculator.model;
+package scicalculator1.model;
 
 /**
  * Manages the state of the calculator
@@ -14,6 +14,7 @@ public class CalculatorState {
     private boolean isNewInput;
     private boolean isError;
     private boolean isScientificMode;
+    private double memory;
 
     /**
      * Constructor initializes calculator to default state
@@ -33,6 +34,7 @@ public class CalculatorState {
         isNewInput = true;
         isError = false;
         isScientificMode = true; // Default to scientific mode
+        memory = 0.0;
     }
 
     // Getters
@@ -91,5 +93,25 @@ public class CalculatorState {
 
     public void setScientificMode(boolean scientificMode) {
         isScientificMode = scientificMode;
+    }
+
+    public double getMemory() {
+        return memory;
+    }
+
+    public void setMemory(double memory) {
+        this.memory = memory;
+    }
+
+    public void memoryAdd(double value) {
+        this.memory += value;
+    }
+
+    public void memorySubtract(double value) {
+        this.memory -= value;
+    }
+
+    public void memoryClear() {
+        this.memory = 0.0;
     }
 }

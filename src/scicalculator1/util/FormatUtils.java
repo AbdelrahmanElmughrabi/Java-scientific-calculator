@@ -1,4 +1,4 @@
-package scicalculator.util;
+package scicalculator1.util;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

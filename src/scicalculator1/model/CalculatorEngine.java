@@ -1,8 +1,8 @@
-package scicalculator.model;
+package scicalculator1.model;
 
-import scicalculator.exception.*;
-import scicalculator.util.FormatUtils;
-import scicalculator.util.MathUtils;
+import scicalculator1.exception.*;
+import scicalculator1.util.FormatUtils;
+import scicalculator1.util.MathUtils;
 
 /**
  * Core calculation engine for the scientific calculator
@@ -247,6 +247,57 @@ public class CalculatorEngine {
     }
 
     /**
+     * Store current display value to memory
+     */
+    public void memoryStore() {
+        try {
+            double value = FormatUtils.parseNumber(state.getDisplayText());
+            state.setMemory(value);
+        } catch (NumberFormatException e) {
+            // Ignore invalid input
+        }
+    }
+
+    /**
+     * Recall memory value to display
+     */
+    public void memoryRecall() {
+        state.setDisplayText(FormatUtils.formatNumber(state.getMemory()));
+        state.setNewInput(true);
+    }
+
+    /**
+     * Add current display value to memory
+     */
+    public void memoryAdd() {
+        try {
+            double value = FormatUtils.parseNumber(state.getDisplayText());
+            state.memoryAdd(value);
+        } catch (NumberFormatException e) {
+            // Ignore invalid input
+        }
+    }
+
+    /**
+     * Subtract current display value from memory
+     */
+    public void memorySubtract() {
+        try {
+            double value = FormatUtils.parseNumber(state.getDisplayText());
+            state.memorySubtract(value);
+        } catch (NumberFormatException e) {
+            // Ignore invalid input
+        }
+    }
+
+    /**
+     * Clear memory
+     */
+    public void memoryClear() {
+        state.memoryClear();
+    }
+
+    /**
      * Execute a binary operation (two operands)
      * @param left The first operand
      * @param right The second operand
@@ -265,6 +316,8 @@ public class CalculatorEngine {
                 return left * right;
             case DIVIDE:
                 return MathUtils.safeDivide(left, right);
+            case MODULO:
+                return MathUtils.safeModulo(left, right);
             case POWER:
                 return MathUtils.power(left, right);
             default:
@@ -298,12 +351,22 @@ public class CalculatorEngine {
                 return MathUtils.log10(value);
             case LN:
                 return MathUtils.ln(value);
+            case EXP:
+                return Math.exp(value);
+            case TENPOWX:
+                return MathUtils.power(10.0, value);
             case SQRT:
                 return MathUtils.sqrt(value);
+            case SQUARE:
+                return value * value;
             case FACTORIAL:
                 return MathUtils.factorial((int) value);
             case PERCENT:
                 return value / 100.0;
+            case RECIPROCAL:
+                return MathUtils.reciprocal(value);
+            case ABS:
+                return Math.abs(value);
             case NEGATE:
                 return MathUtils.negate(value);
             default:
