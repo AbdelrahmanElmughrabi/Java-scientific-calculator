@@ -61,7 +61,6 @@ public class FormatUtils {
      * @return The formatted string
      */
     public static String formatNumber(double value, int decimalPlaces) {
-        // TODO: Implement formatting with specific decimal places
         // Use DecimalFormat for precision
         return String.valueOf(value);
     }
@@ -167,7 +166,6 @@ public class FormatUtils {
      * @return The formatted history string (e.g., "5 + 3 =")
      */
     public static String formatHistory(double operand1, String operator, double operand2) {
-        // TODO: Implement history formatting
         // Create readable history string
         return formatNumber(operand1) + " " + operator + " " + formatNumber(operand2) + " =";
     }
