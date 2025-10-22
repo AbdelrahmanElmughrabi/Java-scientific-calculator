@@ -1,12 +1,13 @@
 package scicalculator1.model;
 
 /**
- * Manages the state of the calculator
- * Stores current values, operations, and display state
+ * Manages the state of the calculator Stores current values, operations, and
+ * display state
  *
  * @author Abdelrahman
  */
 public class CalculatorState {
+
     private double currentValue;
     private double storedValue;
     private Operation currentOperation;

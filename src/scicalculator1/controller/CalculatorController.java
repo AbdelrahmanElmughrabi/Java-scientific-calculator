@@ -18,7 +18,6 @@ import scicalculator1.model.Operation;
 import scicalculator1.exception.CalculatorException;
 import scicalculator1.util.FormatUtils;
 
-
 public class CalculatorController {
 
     // ======== DISPLAY ========
@@ -33,8 +32,23 @@ public class CalculatorController {
     @FXML
     private HBox memoryBar;      // fx:id on the memory bar HBox
 
+    // ======== TOGGLE BUTTONS (for 2nd function) ========
+    @FXML
+    private Button sinButton;
+    @FXML
+    private Button cosButton;
+    @FXML
+    private Button tanButton;
+    @FXML
+    private Button lnButton;
+    @FXML
+    private Button secondButton;
+
     // ======== BACKEND ENGINE ========
     private CalculatorEngine engine;
+
+    // ======== 2ND FUNCTION STATE ========
+    private boolean isSecondActive = false;
 
     // ======== COLORS (no CSS file) ========
     private static final String COL_BG = "#202020"; // window & display bg
@@ -156,38 +170,44 @@ public class CalculatorController {
     }
 
     // ======== DIGITS & DOT ========
-    @FXML private void handleDigit(ActionEvent e) {
+    @FXML
+    private void handleDigit(ActionEvent e) {
         String d = ((Button) e.getSource()).getText();
         int digit = Integer.parseInt(d);
         engine.inputDigit(digit);
         updateDisplay();
     }
 
-    @FXML private void handleDot() {
+    @FXML
+    private void handleDot() {
         engine.inputDecimal();
         updateDisplay();
     }
 
     // ======== CLEAR / BACKSPACE ========
-    @FXML private void handleClear() {
+    @FXML
+    private void handleClear() {
         engine.clearAll();
         historyLabel.setText("");
         updateDisplay();
     }
 
-    @FXML private void handleClearEntry() {
+    @FXML
+    private void handleClearEntry() {
         engine.clearEntry();
         historyLabel.setText("");
         updateDisplay();
     }
 
-    @FXML private void handleBackspace() {
+    @FXML
+    private void handleBackspace() {
         engine.backspace();
         updateDisplay();
     }
 
     // ======== UNARY FUNCTIONS ========
-    @FXML private void handlePercent() {
+    @FXML
+    private void handlePercent() {
         try {
             String historyText = engine.performPercent();
             historyLabel.setText(historyText);
@@ -197,7 +217,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void handleSign() {
+    @FXML
+    private void handleSign() {
         try {
             engine.performUnaryOperation(Operation.NEGATE);
             updateDisplay();
@@ -207,7 +228,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void sqrt() {
+    @FXML
+    private void sqrt() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.SQRT);
@@ -219,7 +241,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void square() {
+    @FXML
+    private void square() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.SQUARE);
@@ -231,7 +254,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void reciprocal() {
+    @FXML
+    private void reciprocal() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.RECIPROCAL);
@@ -248,7 +272,8 @@ public class CalculatorController {
      *
      * @author Abdelrahman
      */
-    @FXML private void abs() {
+    @FXML
+    private void abs() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.ABS);
@@ -260,7 +285,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void exp() {
+    @FXML
+    private void exp() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.EXP);
@@ -272,7 +298,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void tenPowX() {
+    @FXML
+    private void tenPowX() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.TENPOWX);
@@ -284,7 +311,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void log10() {
+    @FXML
+    private void log10() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.LOG);
@@ -296,7 +324,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void ln() {
+    @FXML
+    private void ln() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.LN);
@@ -308,7 +337,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void factorial() {
+    @FXML
+    private void factorial() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
             engine.performUnaryOperation(Operation.FACTORIAL);
@@ -320,20 +350,120 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void constPi() {
+    // ======== TRIGONOMETRIC FUNCTIONS ========
+    /**
+     * Sine/Arc sine function - toggles based on 2nd button state
+     */
+    @FXML
+    private void sin() {
+        try {
+            double v = FormatUtils.parseNumber(engine.getDisplay());
+            engine.performUnaryOperation(Operation.SIN);
+            historyLabel.setText("sin(" + FormatUtils.formatNumber(v) + ")");
+            updateDisplay();
+        } catch (CalculatorException ex) {
+            // Engine already sets error state internally
+            updateDisplay();
+        }
+    }
+
+    /**
+     * Cosine/Arc cosine function - toggles based on 2nd button state
+     */
+    @FXML
+    private void cos() {
+        try {
+            double v = FormatUtils.parseNumber(engine.getDisplay());
+            engine.performUnaryOperation(Operation.COS);
+            historyLabel.setText("cos(" + FormatUtils.formatNumber(v) + ")");
+            updateDisplay();
+        } catch (CalculatorException ex) {
+            // Engine already sets error state internally
+            updateDisplay();
+        }
+    }
+
+    /**
+     * Tangent/Arc tangent function - toggles based on 2nd button state
+     */
+    @FXML
+    private void tan() {
+        try {
+            double v = FormatUtils.parseNumber(engine.getDisplay());
+            engine.performUnaryOperation(Operation.TAN);
+            historyLabel.setText("tan(" + FormatUtils.formatNumber(v) + ")");
+            updateDisplay();
+        } catch (CalculatorException ex) {
+            // Engine already sets error state internally
+            updateDisplay();
+        }
+    }
+
+    /**
+     * Arc sine function - returns angle in degrees
+     */
+    @FXML
+    private void asin() {
+        try {
+            double v = FormatUtils.parseNumber(engine.getDisplay());
+            engine.performUnaryOperation(Operation.ASIN);
+            historyLabel.setText("asin(" + FormatUtils.formatNumber(v) + ")");
+            updateDisplay();
+        } catch (CalculatorException ex) {
+            // Engine already sets error state internally
+            updateDisplay();
+        }
+    }
+
+    /**
+     * Arc cosine function - returns angle in degrees
+     */
+    @FXML
+    private void acos() {
+        try {
+            double v = FormatUtils.parseNumber(engine.getDisplay());
+            engine.performUnaryOperation(Operation.ACOS);
+            historyLabel.setText("acos(" + FormatUtils.formatNumber(v) + ")");
+            updateDisplay();
+        } catch (CalculatorException ex) {
+            // Engine already sets error state internally
+            updateDisplay();
+        }
+    }
+
+    /**
+     * Arc tangent function - returns angle in degrees
+     */
+    @FXML
+    private void atan() {
+        try {
+            double v = FormatUtils.parseNumber(engine.getDisplay());
+            engine.performUnaryOperation(Operation.ATAN);
+            historyLabel.setText("atan(" + FormatUtils.formatNumber(v) + ")");
+            updateDisplay();
+        } catch (CalculatorException ex) {
+            // Engine already sets error state internally
+            updateDisplay();
+        }
+    }
+
+    @FXML
+    private void constPi() {
         String historyText = engine.inputConstant(Math.PI);
         historyLabel.setText(historyText);
         updateDisplay();
     }
 
-    @FXML private void constE() {
+    @FXML
+    private void constE() {
         String historyText = engine.inputConstant(Math.E);
         historyLabel.setText(historyText);
         updateDisplay();
     }
 
     // ======== BINARY OPS & EQUALS ========
-    @FXML private void handleOperator(ActionEvent e) {
+    @FXML
+    private void handleOperator(ActionEvent e) {
         try {
             String sym = ((Button) e.getSource()).getText();
             Operation op = mapSymbolToOperation(sym);
@@ -349,7 +479,8 @@ public class CalculatorController {
         }
     }
 
-    @FXML private void handleEquals() {
+    @FXML
+    private void handleEquals() {
         try {
             if (engine.getState().getCurrentOperation() != null) {
                 String currentDisplay = engine.getDisplay();
@@ -383,44 +514,101 @@ public class CalculatorController {
     }
 
     // ======== MEMORY ========
-    @FXML private void memClear() {
+    @FXML
+    private void memClear() {
         engine.memoryClear();
     }
 
-    @FXML private void memRecall() {
+    @FXML
+    private void memRecall() {
         engine.memoryRecall();
         updateDisplay();
     }
 
-    @FXML private void memPlus() {
+    @FXML
+    private void memPlus() {
         engine.memoryAdd();
     }
 
-    @FXML private void memMinus() {
+    @FXML
+    private void memMinus() {
         engine.memorySubtract();
     }
 
-    @FXML private void memStore() {
+    @FXML
+    private void memStore() {
         engine.memoryStore();
     }
 
     // ======== TOGGLE SECOND (2ⁿᵈ) BUTTON ========
     /**
-     * Handles the "2ⁿᵈ" button toggle for secondary functions.
-     * Currently a no-op placeholder for future implementation.
+     * Handles the "2ⁿᵈ" button toggle for secondary functions. Switches between
+     * primary (sin, cos, tan, ln) and secondary (asin, acos, atan, log)
+     * functions.
      */
-    @FXML private void toggleSecond() {
-        // Placeholder for secondary function toggle
-        // In a full implementation, this would switch functions like:
-        // sin <-> arcsin, cos <-> arccos, x² <-> x³, etc.
+    @FXML
+    private void toggleSecond() {
+        isSecondActive = !isSecondActive;
+
+        // Update button labels and actions based on toggle state
+        if (isSecondActive) {
+            // Switch to secondary functions (inverse trig)
+            if (sinButton != null) {
+                sinButton.setText("asin");
+                sinButton.setOnAction(e -> asin());
+            }
+            if (cosButton != null) {
+                cosButton.setText("acos");
+                cosButton.setOnAction(e -> acos());
+            }
+            if (tanButton != null) {
+                tanButton.setText("atan");
+                tanButton.setOnAction(e -> atan());
+            }
+            if (lnButton != null) {
+                lnButton.setText("log");
+                lnButton.setOnAction(e -> log10());
+            }
+
+            // Highlight the 2nd button to show active state
+            if (secondButton != null) {
+                secondButton.setStyle("-fx-font-size:18px; -fx-font-weight:700; "
+                        + "-fx-background-color:" + COL_PRESSED + "; "
+                        + "-fx-text-fill:" + COL_TEXT + "; "
+                        + BASE_BORDER + " -fx-padding:16;");
+            }
+        } else {
+            // Switch back to primary functions
+            if (sinButton != null) {
+                sinButton.setText("sin");
+                sinButton.setOnAction(e -> sin());
+            }
+            if (cosButton != null) {
+                cosButton.setText("cos");
+                cosButton.setOnAction(e -> cos());
+            }
+            if (tanButton != null) {
+                tanButton.setText("tan");
+                tanButton.setOnAction(e -> tan());
+            }
+            if (lnButton != null) {
+                lnButton.setText("ln");
+                lnButton.setOnAction(e -> ln());
+            }
+
+            // Reset the 2nd button style
+            if (secondButton != null) {
+                styleKey(secondButton, false);
+            }
+        }
     }
 
     // ======== PARENTHESIS (DISABLED) ========
     /**
-     * Placeholder for parenthesis functionality.
-     * Currently disabled in the UI.
+     * Placeholder for parenthesis functionality. Currently disabled in the UI.
      */
-    @FXML private void noopParen() {
+    @FXML
+    private void noopParen() {
         // No operation - parenthesis buttons are disabled
     }
 }
