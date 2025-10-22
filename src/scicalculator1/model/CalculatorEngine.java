@@ -57,6 +57,28 @@ public class CalculatorEngine {
     }
 
     /**
+     * Input a mathematical constant
+     * @param value The constant value (e.g., Math.PI, Math.E)
+     * @return A formatted string describing the constant for history display
+     */
+    public String inputConstant(double value) {
+        if (state.isError()) {
+            state.reset();
+        }
+
+        state.setDisplayText(FormatUtils.formatNumber(value));
+        state.setNewInput(true);
+
+        // Return symbol for history display
+        if (value == Math.PI) {
+            return "\u03c0";
+        } else if (value == Math.E) {
+            return "e";
+        }
+        return "";
+    }
+
+    /**
      * Process a binary operation (operations that require two operands)
      * @param operation The operation to perform
      * @throws CalculatorException If the operation fails
@@ -149,6 +171,66 @@ public class CalculatorEngine {
     }
 
     /**
+     * Process percent operation with context-aware behavior
+     * If there's a pending operation, calculates percentage of the stored value
+     * Otherwise, converts the current value to a percentage (divides by 100)
+     * @return A formatted string describing the operation for history display
+     * @throws CalculatorException If the operation fails
+     */
+    public String performPercent() throws CalculatorException {
+        if (state.isError()) {
+            return "";
+        }
+
+        try {
+            double currentValue = FormatUtils.parseNumber(state.getDisplayText());
+
+            if (state.getCurrentOperation() != null) {
+                // Percent of first operand
+                double firstOperand = state.getStoredValue();
+                double result = firstOperand * (currentValue / 100.0);
+
+                // Validate result
+                if (!MathUtils.isValidNumber(result)) {
+                    state.setError(true);
+                    state.setDisplayText("Error");
+                    return "";
+                }
+
+                // Check for overflow
+                MathUtils.checkOverflow(result);
+
+                state.setDisplayText(FormatUtils.formatNumber(result));
+                state.setCurrentValue(result);
+                return FormatUtils.formatNumber(firstOperand) + " × " + FormatUtils.formatNumber(currentValue) + "%";
+            } else {
+                // Simple percent conversion
+                double result = currentValue / 100.0;
+
+                // Validate result
+                if (!MathUtils.isValidNumber(result)) {
+                    state.setError(true);
+                    state.setDisplayText("Error");
+                    return "";
+                }
+
+                state.setDisplayText(FormatUtils.formatNumber(result));
+                state.setCurrentValue(result);
+                state.setNewInput(true);
+                return FormatUtils.formatNumber(currentValue) + "%";
+            }
+        } catch (CalculatorException e) {
+            state.setError(true);
+            state.setDisplayText("Error");
+            return "";
+        } catch (NumberFormatException e) {
+            state.setError(true);
+            state.setDisplayText("Error");
+            return "";
+        }
+    }
+
+    /**
      * Calculate the result of pending operations
      * @throws CalculatorException If calculation fails
      */
@@ -233,6 +315,7 @@ public class CalculatorEngine {
     /**
      * Get the current calculator state
      * @return The current state
+     * @author Muahmmadjibril
      */
     public CalculatorState getState() {
         return state;
@@ -331,6 +414,7 @@ public class CalculatorEngine {
      * @param operation The operation to perform
      * @return The result of the operation
      * @throws CalculatorException If the operation fails
+     * @author Abdelrahman
      */
     private double executeUnaryOperation(double value, Operation operation)
             throws CalculatorException {

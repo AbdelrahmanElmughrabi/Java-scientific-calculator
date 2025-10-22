@@ -50,6 +50,7 @@ public enum Operation {
      * Constructor for Operation enum
      * @param symbol The display symbol for the operation
      * @param isUnary True if operation takes one operand, false for two
+     * @author Muahmmadjibril
      */
     Operation(String symbol, boolean isUnary) {
         this.symbol = symbol;

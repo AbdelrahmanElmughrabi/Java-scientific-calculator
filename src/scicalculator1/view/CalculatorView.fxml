@@ -9,6 +9,7 @@
   - Uses percent-based GridPane constraints for responsive resize.
   - Display mimics Windows: small expression (top-right), big result (bottom-right).
   - Button colors/hover/press handled by controller.initialize() for uniformity.
+  - author Muahmmadjibril
 -->
 <BorderPane xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -115,7 +116,8 @@
             <Button text="6" onAction="#handleDigit"     GridPane.rowIndex="4" GridPane.columnIndex="2"/>
             <Button text="−" onAction="#handleOperator"  GridPane.rowIndex="4" GridPane.columnIndex="3"/>
             <Button text="10ˣ" onAction="#tenPowX"       GridPane.rowIndex="4" GridPane.columnIndex="4"/>
-
+            
+            <!--@author Abdelrahman -->
             <!-- Row 5 -->
             <Button text="1" onAction="#handleDigit"     GridPane.rowIndex="5" GridPane.columnIndex="0"/>
             <Button text="2" onAction="#handleDigit"     GridPane.rowIndex="5" GridPane.columnIndex="1"/>
@@ -127,7 +129,7 @@
             <Button text="±" onAction="#handleSign"      GridPane.rowIndex="6" GridPane.columnIndex="0"/>
             <Button text="0" onAction="#handleDigit"     GridPane.rowIndex="6" GridPane.columnIndex="1"/>
             <Button text="." onAction="#handleDot"       GridPane.rowIndex="6" GridPane.columnIndex="2"/>
-            <!-- NOTE: use \% (FXML: %% is deprecated) -->
+            
             <Button text="\%" onAction="#handlePercent"  GridPane.rowIndex="6" GridPane.columnIndex="3"/>
             <Button text="="  onAction="#handleEquals"   GridPane.rowIndex="6" GridPane.columnIndex="4"/>
         </GridPane>

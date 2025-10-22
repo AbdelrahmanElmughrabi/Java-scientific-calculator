@@ -194,6 +194,7 @@ public class MathUtils {
      * Calculate arc tangent (inverse tangent) and return result in degrees
      * @param value The value
      * @return The angle in degrees
+     * @author Muahmmadjibril
      */
     public static double atan(double value) {
         return toDegrees(Math.atan(value));

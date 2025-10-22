@@ -1,3 +1,9 @@
+/**
+ * Main controller for the Scientific Calculator Handles all UI events and
+ * delegates to the backend CalculatorEngine
+ *
+ * @author Muahmmadjibril
+ */
 package scicalculator1.controller;
 
 import javafx.event.ActionEvent;
@@ -12,21 +18,20 @@ import scicalculator1.model.Operation;
 import scicalculator1.exception.CalculatorException;
 import scicalculator1.util.FormatUtils;
 
-/**
- * Main controller for the Scientific Calculator
- * Handles all UI events and delegates to the backend CalculatorEngine
- *
- * @author Abdelrahman
- */
+
 public class CalculatorController {
 
     // ======== DISPLAY ========
-    @FXML private Label resultLabel;   // big number
-    @FXML private Label historyLabel;  // small expression
+    @FXML
+    private Label resultLabel;   // big number
+    @FXML
+    private Label historyLabel;  // small expression
 
     // ======== UI CONTAINERS (for runtime styling) ========
-    @FXML private GridPane keypad;     // fx:id on the GridPane with all keys
-    @FXML private HBox memoryBar;      // fx:id on the memory bar HBox
+    @FXML
+    private GridPane keypad;     // fx:id on the GridPane with all keys
+    @FXML
+    private HBox memoryBar;      // fx:id on the memory bar HBox
 
     // ======== BACKEND ENGINE ========
     private CalculatorEngine engine;
@@ -35,13 +40,13 @@ public class CalculatorController {
     private String historyExpression = "";
 
     // ======== COLORS (no CSS file) ========
-    private static final String COL_BG          = "#202020"; // window & display bg
-    private static final String COL_BTN         = "#313131"; // button base
-    private static final String COL_BTN_HOVER   = "#3a3a3a";
-    private static final String COL_PRESSED     = "#4bbefa"; // pressed & equals
-    private static final String COL_TEXT        = "#ffffff";
-    private static final String COL_TEXT_DARK   = "#000000";
-    private static final String BASE_BORDER     = "-fx-border-color:" + COL_BG + "; -fx-border-radius:6; -fx-background-radius:6;";
+    private static final String COL_BG = "#202020"; // window & display bg
+    private static final String COL_BTN = "#313131"; // button base
+    private static final String COL_BTN_HOVER = "#3a3a3a";
+    private static final String COL_PRESSED = "#4bbefa"; // pressed & equals
+    private static final String COL_TEXT = "#ffffff";
+    private static final String COL_TEXT_DARK = "#000000";
+    private static final String BASE_BORDER = "-fx-border-color:" + COL_BG + "; -fx-border-radius:6; -fx-background-radius:6;";
 
     // ======== INITIALIZE: style everything at runtime ========
     @FXML
@@ -56,7 +61,9 @@ public class CalculatorController {
         // Style memory chips
         if (memoryBar != null) {
             for (Node n : memoryBar.getChildren()) {
-                if (n instanceof Button) styleChip((Button) n);
+                if (n instanceof Button) {
+                    styleChip((Button) n);
+                }
             }
         }
 
@@ -187,20 +194,10 @@ public class CalculatorController {
     // ======== UNARY FUNCTIONS ========
     @FXML private void handlePercent() {
         try {
-            double current = FormatUtils.parseNumber(engine.getDisplay());
-            if (engine.getState().getCurrentOperation() != null) {
-                // Percent of first operand
-                double firstOperand = engine.getState().getStoredValue();
-                double result = firstOperand * (current / 100.0);
-                engine.getState().setDisplayText(FormatUtils.formatNumber(result));
-                historyLabel.setText(FormatUtils.formatNumber(firstOperand) + " × " + FormatUtils.formatNumber(current) + "%");
-            } else {
-                engine.performUnaryOperation(Operation.PERCENT);
-                historyLabel.setText(FormatUtils.formatNumber(current * 100.0) + "%");
-            }
+            String historyText = engine.performPercent();
+            historyLabel.setText(historyText);
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
             updateDisplay();
         }
     }
@@ -251,6 +248,11 @@ public class CalculatorController {
         }
     }
 
+    /**
+     * Absolute value operation
+     *
+     * @author Abdelrahman
+     */
     @FXML private void abs() {
         try {
             double v = FormatUtils.parseNumber(engine.getDisplay());
@@ -324,16 +326,14 @@ public class CalculatorController {
     }
 
     @FXML private void constPi() {
-        engine.getState().setDisplayText(FormatUtils.formatNumber(Math.PI));
-        engine.getState().setNewInput(true);
-        historyLabel.setText("π");
+        String historyText = engine.inputConstant(Math.PI);
+        historyLabel.setText(historyText);
         updateDisplay();
     }
 
     @FXML private void constE() {
-        engine.getState().setDisplayText(FormatUtils.formatNumber(Math.E));
-        engine.getState().setNewInput(true);
-        historyLabel.setText("e");
+        String historyText = engine.inputConstant(Math.E);
+        historyLabel.setText(historyText);
         updateDisplay();
     }
 
@@ -370,13 +370,20 @@ public class CalculatorController {
 
     private Operation mapSymbolToOperation(String symbol) {
         switch (symbol) {
-            case "+": return Operation.ADD;
-            case "−": return Operation.SUBTRACT;
-            case "×": return Operation.MULTIPLY;
-            case "÷": return Operation.DIVIDE;
-            case "mod": return Operation.MODULO;
-            case "xʸ": return Operation.POWER;
-            default: return null;
+            case "+":
+                return Operation.ADD;
+            case "−":
+                return Operation.SUBTRACT;
+            case "×":
+                return Operation.MULTIPLY;
+            case "÷":
+                return Operation.DIVIDE;
+            case "mod":
+                return Operation.MODULO;
+            case "xʸ":
+                return Operation.POWER;
+            default:
+                return null;
         }
     }
 
@@ -402,7 +409,23 @@ public class CalculatorController {
         engine.memoryStore();
     }
 
-    // ======== PLACEHOLDERS ========
-    @FXML private void toggleSecond() { /* could swap labels/behaviors later */ }
-    @FXML private void noopParen() { /* parser not implemented in this version */ }
+    // ======== TOGGLE SECOND (2ⁿᵈ) BUTTON ========
+    /**
+     * Handles the "2ⁿᵈ" button toggle for secondary functions.
+     * Currently a no-op placeholder for future implementation.
+     */
+    @FXML private void toggleSecond() {
+        // Placeholder for secondary function toggle
+        // In a full implementation, this would switch functions like:
+        // sin <-> arcsin, cos <-> arccos, x² <-> x³, etc.
+    }
+
+    // ======== PARENTHESIS (DISABLED) ========
+    /**
+     * Placeholder for parenthesis functionality.
+     * Currently disabled in the UI.
+     */
+    @FXML private void noopParen() {
+        // No operation - parenthesis buttons are disabled
+    }
 }
