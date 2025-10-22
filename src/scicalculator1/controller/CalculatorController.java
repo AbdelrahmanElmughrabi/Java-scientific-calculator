@@ -41,6 +41,7 @@ public class CalculatorController {
     private Button tanButton;
     @FXML
     private Button lnButton;
+    private Button modButton; // Will be found programmatically
     @FXML
     private Button secondButton;
 
@@ -84,6 +85,10 @@ public class CalculatorController {
                 if (n instanceof Button) {
                     Button b = (Button) n;
                     boolean isEquals = "=".equals(b.getText());
+                    // Find the mod button to enable toggling
+                    if ("mod".equals(b.getText())) {
+                        this.modButton = b;
+                    }
                     styleKey(b, isEquals);
                 }
             }
@@ -569,6 +574,11 @@ public class CalculatorController {
                 lnButton.setText("log");
                 lnButton.setOnAction(e -> log10());
             }
+            // Modulo becomes Percent
+            if (modButton != null) {
+                modButton.setText("%");
+                modButton.setOnAction(e -> handlePercent());
+            }
 
             // Highlight the 2nd button to show active state
             if (secondButton != null) {
@@ -594,6 +604,11 @@ public class CalculatorController {
             if (lnButton != null) {
                 lnButton.setText("ln");
                 lnButton.setOnAction(e -> ln());
+            }
+            // Percent becomes Modulo
+            if (modButton != null) {
+                modButton.setText("mod");
+                modButton.setOnAction(this::handleOperator); // Revert to original operator handler
             }
 
             // Reset the 2nd button style

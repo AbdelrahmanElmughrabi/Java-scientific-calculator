@@ -5,12 +5,13 @@ import scicalculator1.util.FormatUtils;
 import scicalculator1.util.MathUtils;
 
 /**
- * Core calculation engine for the scientific calculator
- * Handles all mathematical operations and state management
+ * Core calculation engine for the scientific calculator Handles all
+ * mathematical operations and state management
  *
  * @author Abdelrahman
  */
 public class CalculatorEngine {
+
     private CalculatorState state;
 
     /**
@@ -22,6 +23,7 @@ public class CalculatorEngine {
 
     /**
      * Process a digit input
+     *
      * @param digit The digit to append (0-9)
      */
     public void inputDigit(int digit) {
@@ -58,6 +60,7 @@ public class CalculatorEngine {
 
     /**
      * Input a mathematical constant
+     *
      * @param value The constant value (e.g., Math.PI, Math.E)
      * @return A formatted string describing the constant for history display
      */
@@ -80,6 +83,7 @@ public class CalculatorEngine {
 
     /**
      * Process a binary operation (operations that require two operands)
+     *
      * @param operation The operation to perform
      * @throws CalculatorException If the operation fails
      */
@@ -131,6 +135,7 @@ public class CalculatorEngine {
 
     /**
      * Process a unary operation (operations that require one operand)
+     *
      * @param operation The operation to perform
      * @throws CalculatorException If the operation fails
      */
@@ -171,9 +176,10 @@ public class CalculatorEngine {
     }
 
     /**
-     * Process percent operation with context-aware behavior
-     * If there's a pending operation, calculates percentage of the stored value
-     * Otherwise, converts the current value to a percentage (divides by 100)
+     * Process percent operation with context-aware behavior If there's a
+     * pending operation, calculates percentage of the stored value Otherwise,
+     * converts the current value to a percentage (divides by 100)
+     *
      * @return A formatted string describing the operation for history display
      * @throws CalculatorException If the operation fails
      */
@@ -232,6 +238,7 @@ public class CalculatorEngine {
 
     /**
      * Calculate the result of pending operations
+     *
      * @throws CalculatorException If calculation fails
      */
     public void calculateResult() throws CalculatorException {
@@ -314,6 +321,7 @@ public class CalculatorEngine {
 
     /**
      * Get the current calculator state
+     *
      * @return The current state
      * @author Muahmmadjibril
      */
@@ -323,6 +331,7 @@ public class CalculatorEngine {
 
     /**
      * Get the current display value
+     *
      * @return The display text
      */
     public String getDisplay() {
@@ -382,6 +391,7 @@ public class CalculatorEngine {
 
     /**
      * Execute a binary operation (two operands)
+     *
      * @param left The first operand
      * @param right The second operand
      * @param operation The operation to perform
@@ -410,6 +420,7 @@ public class CalculatorEngine {
 
     /**
      * Execute a unary operation (one operand)
+     *
      * @param value The operand
      * @param operation The operation to perform
      * @return The result of the operation
