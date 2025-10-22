@@ -109,30 +109,6 @@ public class MathUtils {
     }
 
     /**
-     * Round to specified number of decimal places
-     * @param value The value to round
-     * @param places The number of decimal places
-     * @return The rounded value
-     */
-    public static double round(double value, int places) {
-        if (places < 0) {
-            return value;
-        }
-        double multiplier = Math.pow(10, places);
-        return Math.round(value * multiplier) / multiplier;
-    }
-
-    /**
-     * Calculate percentage
-     * @param value The value
-     * @param total The total (100%)
-     * @return The percentage
-     */
-    public static double percentage(double value, double total) throws DivisionByZeroException {
-        return safeDivide(value, total) * 100;
-    }
-
-    /**
      * Calculate sine of an angle in degrees
      * @param degrees The angle in degrees
      * @return The sine value

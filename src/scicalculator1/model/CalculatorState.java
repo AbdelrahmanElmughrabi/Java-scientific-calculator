@@ -13,7 +13,6 @@ public class CalculatorState {
     private String displayText;
     private boolean isNewInput;
     private boolean isError;
-    private boolean isScientificMode;
     private double memory;
 
     /**
@@ -33,7 +32,6 @@ public class CalculatorState {
         displayText = "0";
         isNewInput = true;
         isError = false;
-        isScientificMode = true; // Default to scientific mode
         memory = 0.0;
     }
 
@@ -62,10 +60,6 @@ public class CalculatorState {
         return isError;
     }
 
-    public boolean isScientificMode() {
-        return isScientificMode;
-    }
-
     // Setters
     public void setCurrentValue(double currentValue) {
         this.currentValue = currentValue;
@@ -89,10 +83,6 @@ public class CalculatorState {
 
     public void setError(boolean error) {
         isError = error;
-    }
-
-    public void setScientificMode(boolean scientificMode) {
-        isScientificMode = scientificMode;
     }
 
     public double getMemory() {

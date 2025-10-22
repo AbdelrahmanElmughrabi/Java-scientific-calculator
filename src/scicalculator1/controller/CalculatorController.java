@@ -36,9 +36,6 @@ public class CalculatorController {
     // ======== BACKEND ENGINE ========
     private CalculatorEngine engine;
 
-    // ======== HISTORY TRACKING ========
-    private String historyExpression = "";
-
     // ======== COLORS (no CSS file) ========
     private static final String COL_BG = "#202020"; // window & display bg
     private static final String COL_BTN = "#313131"; // button base
@@ -175,14 +172,12 @@ public class CalculatorController {
     @FXML private void handleClear() {
         engine.clearAll();
         historyLabel.setText("");
-        historyExpression = "";
         updateDisplay();
     }
 
     @FXML private void handleClearEntry() {
         engine.clearEntry();
         historyLabel.setText("");
-        historyExpression = "";
         updateDisplay();
     }
 
@@ -207,7 +202,7 @@ public class CalculatorController {
             engine.performUnaryOperation(Operation.NEGATE);
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -219,7 +214,7 @@ public class CalculatorController {
             historyLabel.setText("√(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -231,7 +226,7 @@ public class CalculatorController {
             historyLabel.setText("sqr(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -243,7 +238,7 @@ public class CalculatorController {
             historyLabel.setText("1/(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -260,7 +255,7 @@ public class CalculatorController {
             historyLabel.setText("abs(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -272,7 +267,7 @@ public class CalculatorController {
             historyLabel.setText("exp(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -284,7 +279,7 @@ public class CalculatorController {
             historyLabel.setText("10^(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -296,7 +291,7 @@ public class CalculatorController {
             historyLabel.setText("log(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -308,7 +303,7 @@ public class CalculatorController {
             historyLabel.setText("ln(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -320,7 +315,7 @@ public class CalculatorController {
             historyLabel.setText("fact(" + FormatUtils.formatNumber(v) + ")");
             updateDisplay();
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -349,7 +344,7 @@ public class CalculatorController {
                 updateDisplay();
             }
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }
@@ -363,7 +358,7 @@ public class CalculatorController {
                 updateDisplay();
             }
         } catch (CalculatorException ex) {
-            engine.getState().setDisplayText("Error");
+            // Engine already sets error state internally
             updateDisplay();
         }
     }

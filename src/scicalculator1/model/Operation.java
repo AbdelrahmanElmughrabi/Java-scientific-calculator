@@ -38,9 +38,6 @@ public enum Operation {
     PERCENT("%", true),
     RECIPROCAL("1/x", true),
     ABS("|x|", true),
-
-    // Special operations
-    EQUALS("=", false),
     NEGATE("±", true);
 
     private final String symbol;

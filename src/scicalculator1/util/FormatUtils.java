@@ -55,17 +55,6 @@ public class FormatUtils {
     }
 
     /**
-     * Format a number with specified decimal places
-     * @param value The number to format
-     * @param decimalPlaces The number of decimal places
-     * @return The formatted string
-     */
-    public static String formatNumber(double value, int decimalPlaces) {
-        // Use DecimalFormat for precision
-        return String.valueOf(value);
-    }
-
-    /**
      * Parse a display string to a double value
      * @param displayText The text from the display
      * @return The parsed number
