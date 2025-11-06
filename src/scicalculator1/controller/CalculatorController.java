@@ -66,10 +66,6 @@ public class CalculatorController {
         // Initialize backend engine
         engine = new CalculatorEngine();
 
-        // Display text styles (kept here to avoid app.css)
-        resultLabel.setStyle("-fx-text-fill:" + COL_TEXT + "; -fx-font-size:60px; -fx-font-weight:700; -fx-padding:0 12 4 12;");
-        historyLabel.setStyle("-fx-text-fill:#a6a6a6; -fx-font-size:15px; -fx-padding:0 12 10 12;");
-
         // Style memory chips
         if (memoryBar != null) {
             for (Node n : memoryBar.getChildren()) {
@@ -107,6 +103,7 @@ public class CalculatorController {
                     + "-fx-text-fill:" + COL_TEXT + "; "
                     + BASE_BORDER + " -fx-padding:16;");
             // Keep equals blue on press/release too:
+            //Hovering action
             b.setOnMouseEntered(e -> b.setStyle("-fx-font-size:18px; -fx-font-weight:700; "
                     + "-fx-background-color:" + COL_PRESSED + "; "
                     + "-fx-text-fill:" + COL_TEXT + "; "
@@ -115,6 +112,7 @@ public class CalculatorController {
                     + "-fx-background-color:" + COL_PRESSED + "; "
                     + "-fx-text-fill:" + COL_TEXT + "; "
                     + BASE_BORDER + " -fx-padding:16;"));
+            //pressing action
             b.setOnMousePressed(e -> b.setStyle("-fx-font-size:18px; -fx-font-weight:700; "
                     + "-fx-background-color:" + COL_PRESSED + "; "
                     + "-fx-text-fill:" + COL_TEXT + "; "
@@ -141,7 +139,7 @@ public class CalculatorController {
                 + "-fx-text-fill:" + COL_TEXT + "; "
                 + BASE_BORDER + " -fx-padding:16;";
         final String hover = base.replace(COL_BTN, COL_BTN_HOVER);
-        final String pressed = "-fx-font-size:18px; -fx-font-weight:700; "
+        final String pressed = "-fx-font-size:18px; -fx-font-weight:700; " //Bolder action when pressing
                 + "-fx-background-color:" + COL_PRESSED + "; "
                 + "-fx-text-fill:" + COL_TEXT + "; "
                 + BASE_BORDER + " -fx-padding:16;";
